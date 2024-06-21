@@ -9,7 +9,7 @@ import assert from "assert";
 
 const optionDefinitions = [
     { name: "browser", type: String, description: "Set the browser to test, choices are [safari, firefox, chrome]. By default the $BROWSER env variable is used." },
-    { name: "port", type: Number, defaultValue: 8010, description: "Set the test-server port, The default value is 8010." },
+    { name: "port", type: Number, defaultValue: 7002, description: "Set the test-server port, The default value is 8010." },
     { name: "help", alias: "h", description: "Print this help text." },
 ];
 
@@ -72,7 +72,13 @@ const server = serve(PORT);
 let driver;
 
 async function test() {
-    driver = await new Builder().withCapabilities(capabilities).build();
+    driver = await new Builder().withCapabilities({
+        browserName: `servo`,
+        browserVersion: `0.0.1`,
+        platform: `mac`,
+  platformName: `mac`,
+  version: `0.0.1`,
+}).usingServer(`http://0.0.0.0:7002/`).build();
 
     try {
         await driver.get(`http://localhost:${PORT}/tests/index.html`);
